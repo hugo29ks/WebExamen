@@ -1,12 +1,12 @@
 import {Controller, Get, HttpStatus, Param, Post, Req, Res} from "@nestjs/common";
-import {TiendaService} from "./tienda.service";
 import {TiendaEntity} from "./tienda.entity";
+import {TiendaService} from "./tienda.service";
 
 
 @Controller('Tienda')
 export  class TiendaController {
 
-    constructor(private _tiendaService: TiendaService){
+    constructor(private _tiendaService: TiendaService) {
 
     }
 
@@ -16,24 +16,23 @@ export  class TiendaController {
     }
 
     @Get()
-    async listarTodos(@Res () response,
-                      @Req () request) {
+    async listarTodos(@Res() response,
+                      @Req() request) {
         const tiendas = await this._tiendaService.listarTodos();
-        if(Object.keys(tiendas).length === 0){
+        if (Object.keys(tiendas).length === 0) {
             return response.send({
-                mensaje:'No existe Tienda',
+                mensaje: 'No existe Tienda',
                 estado: HttpStatus.NOT_FOUND,
             });
-        } else{
+        } else {
             return response.status(202).send(tiendas);
         }
     }
 
     @Get('/:nombresBuscar')
-    async buscarTiendas(
-        @Param() paramParams,
-        @Res() response
-    ) {
+    async buscarTiendas(@Param() paramParams,
+                        @Res() response) {
         const tiendas = await this._tiendaService.buscarTiendas(paramParams.nombresBuscar);
         return response.status(202).send(tiendas);
     }
+}

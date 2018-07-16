@@ -5,7 +5,7 @@ import {TiendaData} from "./tienda.data";
 import {InjectRepository} from "@nestjs/typeorm";
 
 @Injectable()
-export class AutorService {
+export class TiendaService {
 
     constructor(
         @InjectRepository(TiendaEntity)
@@ -34,3 +34,4 @@ export class AutorService {
     async buscarTiendas(nombresBuscar: string): Promise<TiendaEntity[]> {
         return await this._tiendaRepository.find({ nombres: Like('%' + nombresBuscar + '%') });
     }
+}
