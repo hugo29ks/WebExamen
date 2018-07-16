@@ -1,16 +1,41 @@
-import {Body, Controller, Get, HttpStatus, Param, Post, Put, Req, Res} from "@nestjs/common";
-import {ProductoService, Producto} from "./producto.service";
-import {ProductoPipe} from "../pipes/producto";
-import {PRODUCTO_SCHEMA} from "./producto.schema";
+import {Controller, Get, HttpStatus, Param, Post, Req, Res} from "@nestjs/common";
+import {ProductoService} from "./producto.service";
+import {ProductoEntity} from "./producto.entity";
 
 @Controller('Producto')
 export class ProductoController {
 
-    constructor(private  _productoService: ProductoService){
+    constructor(private _productoService: ProductoService){
 
+    }
+    @Post()
+    crearProducto() {
+        return this._productoService.crearProducto();
     }
 
     @Get()
+    async listarTodos(@Res () response,
+                      @Req () request) {
+        const productos = await this._productoService.listarTodos();
+        if(Object.keys(productos).length === 0){
+            return response.send({
+                mensaje:'No existe Producto',
+                estado: HttpStatus.NOT_FOUND,
+            });
+        } else{
+            return response.status(202).send(productos);
+        }
+    }
+
+    @Get('/:nombreBuscar')
+    async buscarProductos(
+        @Param() paramParams,
+        @Res() response
+    ) {
+        const productos = await this._productoService.buscarProductos(paramParams.nombreBuscar);
+        return response.status(202).send(productos);
+    }
+    /*@Get()
     listarTodos(@Res () response,
                 @Req () request){
         var arregloProducto = this._productoService.listarTodos();
@@ -83,5 +108,5 @@ export class ProductoController {
                     statusCode: HttpStatus.NOT_FOUND,
                 });
         }
-    }
+    }*/
 }

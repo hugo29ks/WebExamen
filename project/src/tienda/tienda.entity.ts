@@ -27,12 +27,12 @@ export class TiendaEntity {
         producto => producto.tiendas
     )
 
-    productos: [ProductoEntity];
+    productos: number;
 
     @ManyToOne(
         type => UsuarioEntity,
         usuario => usuario.tiendas
     )
 
-    usuarios: UsuarioEntity;
+    usuarios: number;
 }

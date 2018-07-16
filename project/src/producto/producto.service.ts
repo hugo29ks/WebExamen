@@ -1,20 +1,43 @@
 import {Injectable} from "@nestjs/common";
+import {ProductoEntity} from "./producto.entity";
+import {InjectRepository} from "@nestjs/typeorm";
+import {Like, Repository} from "typeorm";
+import {ProductoData} from "./producto.data";
 
 @Injectable()
 export class ProductoService {
 
-    arregloProductos: Producto[] = [];
+    constructor(
+        @InjectRepository(ProductoEntity)
+        private readonly _productoRepository: Repository<ProductoEntity>) {
 
-    crearProducto(producto: Producto): Producto[]{
-        this.arregloProductos.push(producto);
-        return this.arregloProductos;
+    }
+    crearProducto(){
+        for(var productos in ProductoData) {
+            const producto = new ProductoEntity();
+            producto.id = ProductoData[productos].id;
+            producto.nProducto = ProductoData[productos].nProducto;
+            producto.nombre = ProductoData[productos].nombre;
+            producto.descripcion = ProductoData[productos].descripcion;
+            producto.precio = ProductoData[productos].precio;
+            producto.fechaLanzamiento = ProductoData[productos].fechaLanzamiento;
+            producto.aniosGarantia = ProductoData[productos].aniosGarantia;
+            producto.tiendaId = ProductoData[productos].tiendaId;
+            this._productoRepository.save(producto);
+        }
+        return this._productoRepository.find();
     }
 
-    listarTodos(){
-        return this.arregloProductos;
+    async listarTodos(): Promise<ProductoEntity[]> {
+        return await this._productoRepository.find();
     }
 
-    obtenerUno(id){
+    async buscarProductos(nombreBuscar: string): Promise<ProductoEntity[]> {
+        return await this._productoRepository.find({ nombre: Like('%' + nombreBuscar + '%') });
+    }
+    
+
+   /* obtenerUno(id){
         const productoEncontrado = this.arregloProductos.find(producto => producto.id === id);
         return productoEncontrado;
     }
@@ -31,21 +54,7 @@ export class ProductoService {
         tiendaEditado.tiendaId = tiendaId;
 
         return tiendaEditado;
-    }
+    }*/
 
 }
 
-
-export class Producto {
-
-    constructor(
-        public id: number,
-        public nProducto: number,
-        public nombre: string,
-        public descripcion: string,
-        public precio: number,
-        public fechaLanzamiento: string,
-        public aniosGarantia: number,
-        public tiendaId: number,
-    ){};
-}

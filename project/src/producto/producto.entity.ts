@@ -4,10 +4,10 @@ import {TiendaEntity} from "../tienda/tienda.entity";
 @Entity('producto')
 export class ProductoEntity {
     @PrimaryGeneratedColumn()
-    idProducto: number;
+    id: number;
 
     @Column('int')
-    numeroProductos: number;
+    nProducto: number;
 
     @Column({ length: 500 })
     nombre: string;
@@ -18,16 +18,19 @@ export class ProductoEntity {
     @Column('int')
     precio: number;
 
-    @Column({ length: 10 })
+    @Column({ length: 500 })
     fechaLanzamiento: string;
 
     @Column('int')
     aniosGarantia: number;
+
+    @Column('int')
+    tiendaId: number;
 
     @ManyToOne(
         type => TiendaEntity,
         tienda => tienda.productos
     )
 
-    tiendas: TiendaEntity;
+    tiendas: number;
 }

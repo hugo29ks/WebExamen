@@ -7,15 +7,22 @@ export class UsuarioEntity {
     idUsuario: number;
 
     @Column({ length: 500 })
-    usuario: string;
+    user: string;
 
     @Column({ length: 500 })
     password: string;
+
+    @Column({ length: 500 })
+    nombreUsuario: string;
+
+    @Column({ length: 500 })
+    apellidoUsuario: string;
+
 
     @OneToMany(
         type => TiendaEntity,
         tienda => tienda.usuarios
     )
 
-    tiendas: [TiendaEntity];
+    tiendas: number;
 }
